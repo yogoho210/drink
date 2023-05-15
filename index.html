@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link href="main.css" rel="stylesheet">
+</head>
+
+<body>
+
+  <h4>절주칭찬스티커🍺</h4>
+  <p>총 <span class="count">0</span>개</p>
+
+  <main class="grid">
+    <div class="grid-item"></div>
+    <div class="grid-item"></div>
+    <div class="grid-item"></div>
+    <div class="grid-item"></div>
+    <div class="grid-item"></div>
+    <div class="grid-item"></div>
+    <div class="grid-item"></div>
+    <div class="grid-item"></div>
+    <div class="grid-item"></div>
+    <div class="grid-item"></div>
+    <div class="grid-item"></div>
+    <div class="grid-item"></div>
+    <div class="grid-item"></div>
+    <div class="grid-item"></div>
+    <div class="grid-item"></div>
+    <div class="grid-item"></div>
+    <div class="grid-item"></div>
+    <div class="grid-item"></div>
+    <div class="grid-item"></div>
+    <div class="grid-item"></div>
+    <div class="grid-item"></div>
+    <div class="grid-item"></div>
+    <div class="grid-item"></div>
+    <div class="grid-item"></div>
+    <div class="grid-item"></div>
+    <div class="grid-item"></div>
+    <div class="grid-item"></div>
+    <div class="grid-item"></div>
+    <div class="grid-item"></div>
+    <div class="grid-item"></div>
+  </main>
+
+  <button class="btn reset">리셋</button>
+
+  <script>
+    const getRandomEmoji = () => {
+
+      const emojis = ['😀', '😃', '😄', '😁', '😆', '😅', '🤣', 
+      '😂', '🙂', '🙃', '😉', '😊', '😇', '🥰', '😍', '🤩', 
+      '😘', '😗','😋', '😛', '😜', '🤪', '😝', 
+      '🤑', '🤗', '🤭', '🤫', '🤐', '🤨', '😐', '😑', '😶', 
+      '😏', '😒', '🙄', '😬', '😮', '🤥', '😌', '😔', '😪', 
+      '🤤', '😴', '😷', '🤒', '🤕', '🤮', '🤧', '🥴', '😵', '🤯', 
+      '🤠', '🥳','😎', '🤓', '🧐', '😕', '😟', '🙁', '😮', '😯', 
+      '😲', '😳', '🥺', '😦', '😧', '😨', '😰', '😥', '😢', '😭', 
+      '😖', '😣', '🥱', '😤', '👻', '😺', '😸', 
+      '😹', '😻', '😼', '😽', '🙀', '😿', '😾',
+      '💘','💝','💖','💗','💓','💞','💕','💟',
+      '💔','❤','🧡','💛','💚','💙','💜','🤎','🖤','🤍','💯',
+      '🐶','🐕','🦮','🐕‍🦺','🐩','🐺','🦊','🦝','🐱','🐈','🦁',
+      '🐯','🐅','🐆','🐴','🐎','🦄','🦓','🦌','🐮','🐂','🐃','🐄','🐷']
+      return emojis[~~(Math.random() * emojis.length)]
+    } 
+    //페이지로드
+    if (localStorage.getItem('list') == null){
+      localStorage.setItem('list', JSON.stringify([]))
+    }
+
+    //페이지로드시 DB꺼내서 디스플레이
+    let list = JSON.parse(localStorage.getItem('list'));
+    list.forEach((a, i) => {
+      document.querySelectorAll('.grid-item')[i].innerHTML = a;
+    });
+
+    //수량카운트
+    document.querySelector('.count').innerHTML = list.length;
+    
+    let grid = document.querySelectorAll('.grid-item');
+    
+
+    for (let i = 0; i < grid.length; i++){
+    
+    document.querySelectorAll('.grid-item')[i].addEventListener('click', function(){
+      
+      if (document.querySelectorAll('.grid-item')[i].innerHTML != ''){
+        list.splice(i, 1);
+        document.querySelector('.count').innerHTML = list.length;
+        
+        //clear
+        grid.forEach((a,i)=>{
+          grid[i].innerHTML = ''
+        });
+        grid.forEach((a, j) => {
+          if (list[j] != undefined) {
+            document.querySelectorAll('.grid-item')[j].innerHTML = '<span>' + list[j] + '</span>';
+          }
+        });
+        localStorage.setItem('list', JSON.stringify(list)); 
+        return;
+      }
+      
+      let result = confirm("절주했나요?");
+      if (result == true) {
+        list = JSON.parse(localStorage.getItem('list'));
+        list.push(getRandomEmoji());
+        document.querySelector('.count').innerHTML = list.length;
+
+
+        grid.forEach((a, j) => {
+          if (list[j] != undefined) {
+            document.querySelectorAll('.grid-item')[j].innerHTML = '<span>' + list[j] + '</span>';
+          }
+        });
+        localStorage.setItem('list', JSON.stringify(list)); 
+      }
+      
+    })
+
+    }
+
+
+    document.querySelector('.reset').addEventListener('click', function(){
+      clearHTML();
+      localStorage.setItem('list', JSON.stringify([])); 
+    })
+
+
+
+    function clearHTML (){
+      let result = confirm("리셋할까요?");
+        if (result == true) {
+        document.querySelector('.count').innerHTML = 0;
+        grid.forEach((a,i)=>{
+          grid[i].innerHTML = ''
+        })
+      }
+    }
+
+    
+  </script>
+
+
+</body>
+
+</html>

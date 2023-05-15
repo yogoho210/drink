@@ -90,6 +90,7 @@
     document.querySelectorAll('.grid-item')[i].addEventListener('click', function(){
       
       if (document.querySelectorAll('.grid-item')[i].innerHTML != ''){
+        
         list.splice(i, 1);
         document.querySelector('.count').innerHTML = list.length;
         
@@ -107,19 +108,23 @@
       }
       
       let result = confirm("절주했나요?");
-      if (result == true) {
-        list = JSON.parse(localStorage.getItem('list'));
-        list.push(getRandomEmoji());
-        document.querySelector('.count').innerHTML = list.length;
+      if (result == true){
+        let result2 = prompt("오늘 음주량을 기록하세요");
+        if (result2 != null) {
+          list = JSON.parse(localStorage.getItem('list'));
+          list.push(getRandomEmoji() + ' <span class="small"> ' + result2 + '</span>');
+          document.querySelector('.count').innerHTML = list.length;
 
 
-        grid.forEach((a, j) => {
-          if (list[j] != undefined) {
-            document.querySelectorAll('.grid-item')[j].innerHTML = '<span>' + list[j] + '</span>';
-          }
-        });
-        localStorage.setItem('list', JSON.stringify(list)); 
+          grid.forEach((a, j) => {
+            if (list[j] != undefined) {
+              document.querySelectorAll('.grid-item')[j].innerHTML = '<span>' + list[j] + ' </span>';
+            }
+          });
+          localStorage.setItem('list', JSON.stringify(list)); 
+        }
       }
+      
       
     })
 

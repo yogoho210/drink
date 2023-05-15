@@ -1,3 +1,9 @@
+body {
+  font-family: 'Hahmlet', serif;
+}
+button {
+  font-family: 'Hahmlet', serif;
+}
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, 100px);
@@ -33,7 +39,7 @@
 .small {
   position: absolute;
   left: 0;
-  bottom: 0;
+  bottom: 1px;
   background: #eee;
   font-size: 10px;
   padding: 5px;

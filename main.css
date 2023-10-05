@@ -1,7 +1,7 @@
 body {
   font-family: 'Hahmlet', serif;
 }
-button {
+button, input {
   font-family: 'Hahmlet', serif;
 }
 .grid {

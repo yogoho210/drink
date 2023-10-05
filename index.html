@@ -19,9 +19,17 @@
 
   <h3>절주칭찬스티커🍺</h3>
   <p>총 <span class="count">0</span>개</p>
+  <p>보상 : <input></p>
+  <p>시작일 : <input type="date" class="date"></p>
+  <p>기준 : 하루 맥주 330ml 이하 섭취시 스티커 발부 가능</p>
 
+  <style>
+    /* css before는 조작불가, 다른 레이아웃 찾아야함 */
+    
+  </style>
   <main class="grid">
-    <div class="grid-item"></div>
+    <div class="grid-item"><span class="small">1234</span>
+    </div>
     <div class="grid-item"></div>
     <div class="grid-item"></div>
     <div class="grid-item"></div>
@@ -54,8 +62,33 @@
   </main>
 
   <button class="btn reset">리셋</button>
+  <button class="btn share" style="background: rgb(184, 227, 255); margin-left: 10px;">공유</button>
 
   <script>
+
+    document.querySelector('.share').addEventListener('click', function(){
+      let a = localStorage.getItem('list')
+      let val = document.querySelector('.date').value;
+      window.history.pushState({}, null, '?start=' + val + '&a=' + a)
+      navigator.clipboard.writeText('https://yogoho210.github.io/drink/?start='+ val +'&a='+a)
+    })
+
+    //공유한 내용 보여주는 기능
+    const urlParam = new URLSearchParams(window.location.search);
+    if (urlParam.get('a') != null){
+
+      let 공유용시작날짜 = urlParam.get('start')
+      document.querySelector('.date').value = 공유용시작날짜
+      localStorage.setItem('date', 공유용시작날짜)
+      let 공유용데이터 = JSON.parse(urlParam.get('a'))
+      공유용데이터.forEach((a, i) => {
+        document.querySelectorAll('.grid-item')[i].innerHTML = a;
+      });
+    }
+
+    
+
+
     const getRandomEmoji = () => {
 
       const emojis = ['😀', '😃', '😄', '😁', '😆', '😅', '🤣', 
@@ -109,6 +142,9 @@
             document.querySelectorAll('.grid-item')[j].innerHTML = '<span>' + list[j] + '</span>';
           }
         });
+        //삭제시 다시 날짜 표기
+        let val = document.querySelector('.date').value;
+        날짜다시표기(val)
         localStorage.setItem('list', JSON.stringify(list)); 
         return;
       }
@@ -127,6 +163,10 @@
               document.querySelectorAll('.grid-item')[j].innerHTML = '<span>' + list[j] + ' </span>';
             }
           });
+
+          //기록하면 날짜도 다시표기
+          let val = document.querySelector('.date').value;
+          날짜다시표기(val)
           localStorage.setItem('list', JSON.stringify(list)); 
         }
       }
@@ -154,6 +194,49 @@
       }
     }
 
+
+    //날짜표기기능
+    //localstorage에 있으면 표기
+    let 시작일 = localStorage.getItem('date')
+    if (시작일){
+      document.querySelector('.date').value = 시작일;
+      let gridSpan = document.querySelectorAll('span.small');  
+      시작일 = new Date(시작일)  
+
+      //span태그안에 날짜 표기
+      let day;
+      for (let i = 0; i < gridSpan.length; i++){
+        시작일 = new Date(document.querySelector('.date').value)
+        day = new Date(시작일.setDate(시작일.getDate() + i)).toLocaleDateString().substr(6)
+        gridSpan[i].innerHTML = gridSpan[i].innerHTML + 
+        `<span class="daystamp" style="color:grey; font-size : 7px"> (${day})</span>` 
+      }
+      
+    }
+    //날짜선택시 localstorage 저장기능
+    document.querySelector('.date').addEventListener('input', function(){
+      let val = document.querySelector('.date').value;
+      localStorage.setItem('date', val)
+      console.log(val)
+      //span태그안에 날짜 표기
+      날짜다시표기(val)
+    })
+
+    function 날짜다시표기(val){
+      let daystamp = document.querySelectorAll('span.daystamp');  
+      for (let i = 0; i < daystamp.length; i++){
+        daystamp[i].innerHTML = ''
+      }
+      let gridSpan = document.querySelectorAll('span.small');  
+      let 시작일 = new Date(val)
+      let day;
+      for (let i = 0; i < gridSpan.length; i++){
+        시작일 = new Date(document.querySelector('.date').value)
+        day = new Date(시작일.setDate(시작일.getDate() + i)).toLocaleDateString().substr(6)
+        gridSpan[i].innerHTML = gridSpan[i].innerHTML + 
+        `<span class="daystamp" style="color:grey; font-size : 7px"> (${day})</span>` 
+      }
+    }
     
   </script>
 
